@@ -1,12 +1,14 @@
 from flask import Flask
-from data import db_session
-from data.yawork import User
 
+from data import db_session
+from data.jobs import Jobs
+from data.yawork import User
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 
+# вызывать для заполнения базы данных с составом команды
 def add_captain_and_colonists():
     session = db_session.create_session()
 
@@ -62,9 +64,26 @@ def add_captain_and_colonists():
     print('Done')
 
 
+def add_job():
+    session = db_session.create_session()
+    cap_job = {
+        "team_leader": 1,
+        "job": "deployment of residential modules 1 and 2",
+        "work_size": 15,
+        "collaborators": '2, 3',
+        "is_finished": False
+    }
+
+    captain = Jobs(**cap_job)
+
+    session.add(captain)
+    session.commit()
+    print('Done_Job')
+
+
 def main():
     db_session.global_init("db/blogs.db")
-    add_captain_and_colonists()
+    add_job()
     app.run()
 
 
